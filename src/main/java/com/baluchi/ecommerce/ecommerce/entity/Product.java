@@ -3,6 +3,7 @@ package com.baluchi.ecommerce.ecommerce.entity;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.baluchi.ecommerce.ecommerce.dto.ProductDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -43,4 +44,14 @@ public class Product {
     @JsonIgnore
     private Category category;
 
+    public ProductDto getDto() {
+        ProductDto productDto = new ProductDto();
+        productDto.setId(id);
+        productDto.setName(name);
+        productDto.setPrice(price);
+        productDto.setDescription(description);
+        productDto.setByteImg(img);
+        productDto.setCategoryId(category.getId());
+        return productDto;
+    }
 }
