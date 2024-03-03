@@ -29,7 +29,7 @@ public class User {
     private UserRole role;
 
     @Lob
-    @Column(columnDefinition = "longlob")
+    @Column(columnDefinition = "Longblob")
     private byte[] img;
 
 }
