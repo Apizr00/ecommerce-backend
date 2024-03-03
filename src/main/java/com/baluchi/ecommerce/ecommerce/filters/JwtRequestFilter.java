@@ -11,7 +11,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.baluchi.ecommerce.ecommerce.services.UserDetailsServiceImpl;
+import com.baluchi.ecommerce.ecommerce.services.servicesjwt.UserDetailsServiceImpl;
 import com.baluchi.ecommerce.ecommerce.utils.JwtUtil;
 
 import jakarta.servlet.FilterChain;

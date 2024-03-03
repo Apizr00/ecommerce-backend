@@ -2,9 +2,10 @@ package com.baluchi.ecommerce.ecommerce.controller;
 
 import java.io.IOException;
 import java.util.Optional;
-
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baluchi.ecommerce.ecommerce.dto.AuthenticationRequest;
+import com.baluchi.ecommerce.ecommerce.dto.SignupRequest;
+import com.baluchi.ecommerce.ecommerce.dto.UserDto;
 import com.baluchi.ecommerce.ecommerce.entity.User;
 import com.baluchi.ecommerce.ecommerce.repository.UserRepository;
+import com.baluchi.ecommerce.ecommerce.services.auth.AuthService;
 import com.baluchi.ecommerce.ecommerce.utils.JwtUtil;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -37,6 +41,8 @@ public class AuthController {
     public static final String TOKEN_PREFIX = "Bearer";
 
     private static final String HEADER_STRING = "Authorization";
+
+    private final AuthService authService;
 
     @PostMapping("/authenticate")
     public void createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest,
@@ -63,6 +69,16 @@ public class AuthController {
             response.addHeader(HEADER_STRING, TOKEN_PREFIX + jwt);
         }
 
+    }
+
+    @PostMapping("/sign-up")
+    public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest) {
+        if (authService.hasUserWithEmail(signupRequest.getEmail())) {
+            return new ResponseEntity<>("User Already Exists", HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        UserDto userDto = authService.createUser(signupRequest);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
 }

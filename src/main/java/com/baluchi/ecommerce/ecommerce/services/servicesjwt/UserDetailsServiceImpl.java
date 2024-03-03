@@ -1,4 +1,4 @@
-package com.baluchi.ecommerce.ecommerce.services;
+package com.baluchi.ecommerce.ecommerce.services.servicesjwt;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -23,7 +23,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Optional<User> optionalUser = userRepository.findFirstByEmail(username);
         if (optionalUser.isEmpty())
             throw new UsernameNotFoundException("Username Not Found", null);
-        return new org.springframework.security.core.usersdetails.User(optionalUser.get().getEmail(),
-                optionalUser.get().getPassword(), new ArrayList<>());
+        return new org.springframework.security.core.usersdetails.User(optionalUser.get().getEmail(),optionalUser.get().getPassword(), new ArrayList<>());
     }
 }
