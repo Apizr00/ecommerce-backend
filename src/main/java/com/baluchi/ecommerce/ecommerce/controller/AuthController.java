@@ -52,7 +52,7 @@ public class AuthController {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     authenticationRequest.getUsername(), authenticationRequest.getPassword()));
         } catch (BadCredentialsException e) {
-            throw new BadCredentialsException("Incorrect Username or password.");
+            throw new BadCredentialsException("Incorrect username or password.");
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
@@ -62,7 +62,7 @@ public class AuthController {
         if (optionalUser.isPresent()) {
 
             response.getWriter().write(new JSONObject()
-                    .put("userId", optionalUser.get().getUser_id())
+                    .put("id", optionalUser.get().getId())
                     .put("role", optionalUser.get().getRole())
                     .toString());
 
@@ -74,7 +74,7 @@ public class AuthController {
     @PostMapping("/sign-up")
     public ResponseEntity<?> signupUser(@RequestBody SignupRequest signupRequest) {
         if (authService.hasUserWithEmail(signupRequest.getEmail())) {
-            return new ResponseEntity<>("User Already Exists", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("User already exists", HttpStatus.NOT_ACCEPTABLE);
         }
 
         UserDto userDto = authService.createUser(signupRequest);
