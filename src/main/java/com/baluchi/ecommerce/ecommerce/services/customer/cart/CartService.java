@@ -1,6 +1,7 @@
 package com.baluchi.ecommerce.ecommerce.services.customer.cart;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 
@@ -23,4 +24,6 @@ public interface CartService {
     OrderDto placeOrder(PlaceOrderDto placeOrderDto);
 
     List<OrderDto> getMyPlacedOrders(Long userId);
+
+    OrderDto searchOrderByTrackingId(UUID trackingId);
 }
