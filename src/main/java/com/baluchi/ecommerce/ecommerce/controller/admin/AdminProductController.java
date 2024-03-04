@@ -21,9 +21,6 @@ import com.baluchi.ecommerce.ecommerce.services.admin.faq.FAQService;
 import com.baluchi.ecommerce.ecommerce.services.admin.product.AdminProductService;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 @RequestMapping("/api/admin")
