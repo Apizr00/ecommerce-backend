@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baluchi.ecommerce.ecommerce.dto.ProductDto;
-import com.baluchi.ecommerce.ecommerce.services.admin.product.ProductService;
+import com.baluchi.ecommerce.ecommerce.services.admin.product.AdminProductService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdminProductController {
     
-    private final ProductService productService;
+    private final AdminProductService productService;
 
     @PostMapping("/product")
     public ResponseEntity<ProductDto> addProduct(@ModelAttribute ProductDto productDto) throws IOException {
