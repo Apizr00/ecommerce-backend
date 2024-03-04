@@ -8,4 +8,5 @@ import com.baluchi.ecommerce.ecommerce.entity.Coupon;
 @Repository
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
     
+    boolean existsByCode(String code);
 }
