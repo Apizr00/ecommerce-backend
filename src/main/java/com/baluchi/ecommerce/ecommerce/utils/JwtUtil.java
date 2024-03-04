@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import javax.crypto.SecretKey;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +20,9 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtil {
 
-    public static final String SECRET = "abc123";
+    //public static final String SECRET = "abc123";
+
+    public static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public String generateToken(String userName) {
 
@@ -37,10 +41,16 @@ public class JwtUtil {
 
     }
 
+    // public Key getSignkey() {
+    //     byte[] keybytes = Decoders.BASE64.decode(SECRET_KEY);
+    //     return Keys.hmacShaKeyFor(keybytes);
+    // }
+
     public Key getSignkey() {
-        byte[] keybytes = Decoders.BASE64.decode(SECRET);
-        return Keys.hmacShaKeyFor(keybytes);
+        byte[] keyBytes = SECRET_KEY.getEncoded(); // Convert SecretKey to byte array
+        return Keys.hmacShaKeyFor(keyBytes);
     }
+    
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
