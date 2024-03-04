@@ -3,6 +3,7 @@ package com.baluchi.ecommerce.ecommerce.services.customer.cart;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import com.baluchi.ecommerce.ecommerce.repository.UserRepository;
 import com.baluchi.ecommerce.ecommerce.dto.AddProductInCartDto;
 import com.baluchi.ecommerce.ecommerce.dto.CartItemsDto;
 import com.baluchi.ecommerce.ecommerce.dto.OrderDto;
+import com.baluchi.ecommerce.ecommerce.dto.PlaceOrderDto;
 import com.baluchi.ecommerce.ecommerce.entity.CartItems;
 import com.baluchi.ecommerce.ecommerce.entity.Coupon;
 import com.baluchi.ecommerce.ecommerce.entity.Order;
@@ -146,7 +148,8 @@ public class CartServiceImpl implements CartService {
             cartItem.setQuantity(cartItem.getQuantity() + 1);
 
             if (activeOrder.getCoupon() != null) {
-                double discountAmount = ((activeOrder.getCoupon().getDiscount() / 100.0) * activeOrder.getTotalAmount());
+                double discountAmount = ((activeOrder.getCoupon().getDiscount() / 100.0)
+                        * activeOrder.getTotalAmount());
                 double netAmount = activeOrder.getTotalAmount() - discountAmount;
 
                 activeOrder.setAmount((long) netAmount);
@@ -158,6 +161,66 @@ public class CartServiceImpl implements CartService {
             return activeOrder.getOrderDto();
         }
 
+        return null;
+    }
+
+    public OrderDto decreaseProductQuantity(AddProductInCartDto addProductInCartDto) {
+        Order activeOrder = orderRepository.findByUserIdAndOrderStatus(addProductInCartDto.getUserId(),
+                OrderStatus.Pending);
+        Optional<Product> optionalProduct = productRepository.findById(addProductInCartDto.getProductId());
+
+        Optional<CartItems> optionalCartItem = cartItemsRepository.findByProductIdAndOrderIdAndUserId(
+                addProductInCartDto.getProductId(), activeOrder.getId(), addProductInCartDto.getUserId());
+
+        if (optionalProduct.isPresent() && optionalCartItem.isPresent()) {
+            CartItems cartItem = optionalCartItem.get();
+            Product product = optionalProduct.get();
+
+            activeOrder.setAmount(activeOrder.getAmount() - product.getPrice());
+            activeOrder.setTotalAmount(activeOrder.getTotalAmount() - product.getPrice());
+
+            cartItem.setQuantity(cartItem.getQuantity() - 1);
+
+            if (activeOrder.getCoupon() != null) {
+                double discountAmount = ((activeOrder.getCoupon().getDiscount() / 100.0)
+                        * activeOrder.getTotalAmount());
+                double netAmount = activeOrder.getTotalAmount() - discountAmount;
+
+                activeOrder.setAmount((long) netAmount);
+                activeOrder.setDiscount((long) discountAmount);
+            }
+
+            cartItemsRepository.save(cartItem);
+            orderRepository.save(activeOrder);
+            return activeOrder.getOrderDto();
+        }
+
+        return null;
+    }
+
+    public OrderDto placeOrder(PlaceOrderDto placeOrderDto) {
+        Order activeOrder = orderRepository.findByUserIdAndOrderStatus(placeOrderDto.getUserId(),
+                OrderStatus.Pending);
+        Optional<User> optionalUser = userRepository.findById(placeOrderDto.getUserId());
+        if (optionalUser.isPresent()) {
+            activeOrder.setOrderDescription(placeOrderDto.getOrderDescription());
+            activeOrder.setAddress(placeOrderDto.getAddress());
+            activeOrder.setDate(new Date());
+            activeOrder.setOrderStatus(OrderStatus.Placed);
+            activeOrder.setTrackingId(UUID.randomUUID());
+
+            orderRepository.save(activeOrder);
+
+            Order order = new Order();
+            order.setAmount(0L);
+            order.setTotalAmount(0L);
+            order.setDiscount(0L);
+            order.setUser(optionalUser.get());
+            order.setOrderStatus(OrderStatus.Pending);
+            orderRepository.save(order);
+
+            return activeOrder.getOrderDto();
+        }
         return null;
     }
 }

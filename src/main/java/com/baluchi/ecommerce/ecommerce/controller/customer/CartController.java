@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baluchi.ecommerce.ecommerce.dto.AddProductInCartDto;
 import com.baluchi.ecommerce.ecommerce.dto.OrderDto;
+import com.baluchi.ecommerce.ecommerce.dto.PlaceOrderDto;
 import com.baluchi.ecommerce.ecommerce.exceptions.ValidationException;
 import com.baluchi.ecommerce.ecommerce.services.customer.cart.CartService;
 
@@ -47,5 +48,15 @@ public class CartController {
     @PostMapping("/addition")
     public ResponseEntity<OrderDto> increaseProductQuantity(@RequestBody AddProductInCartDto addProductInCartDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(cartService.increaseProductQuantity(addProductInCartDto));
+    }
+
+    @PostMapping("/deduction")
+    public ResponseEntity<OrderDto> decreaseProductQuantity(@RequestBody AddProductInCartDto addProductInCartDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(cartService.decreaseProductQuantity(addProductInCartDto));
+    }
+
+    @PostMapping("/placeOrder")
+    public ResponseEntity<OrderDto> placeOrder(@RequestBody PlaceOrderDto placeOrderDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(cartService.placeOrder(placeOrderDto));
     }
 }
