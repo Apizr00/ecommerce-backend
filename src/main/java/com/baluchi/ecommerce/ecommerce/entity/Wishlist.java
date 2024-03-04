@@ -3,6 +3,8 @@ package com.baluchi.ecommerce.ecommerce.entity;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.baluchi.ecommerce.ecommerce.dto.WishlistDto;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -29,4 +31,18 @@ public class Wishlist {
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
+
+    public WishlistDto getWishlistDto() {
+        WishlistDto wishlistDto = new WishlistDto();
+
+        wishlistDto.setId(id);
+        wishlistDto.setProductId(product.getId());
+        wishlistDto.setReturnedImg(product.getImg());
+        wishlistDto.setProductName(product.getName());
+        wishlistDto.setProductDescription(product.getDescription());
+        wishlistDto.setPrice(product.getPrice());
+        wishlistDto.setUserId(user.getId());
+
+        return wishlistDto;
+    }
 }
