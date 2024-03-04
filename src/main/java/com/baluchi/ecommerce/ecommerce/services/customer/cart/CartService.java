@@ -1,5 +1,7 @@
 package com.baluchi.ecommerce.ecommerce.services.customer.cart;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 
 import com.baluchi.ecommerce.ecommerce.dto.AddProductInCartDto;
@@ -19,4 +21,6 @@ public interface CartService {
     OrderDto decreaseProductQuantity(AddProductInCartDto addProductInCartDto);
 
     OrderDto placeOrder(PlaceOrderDto placeOrderDto);
+
+    List<OrderDto> getMyPlacedOrders(Long userId);
 }
