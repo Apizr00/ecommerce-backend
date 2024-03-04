@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.baluchi.ecommerce.ecommerce.dto.ProductDto;
 
-public interface ProductService {
+public interface AdminProductService {
     
     ProductDto addProduct(ProductDto productDto) throws IOException;
 
