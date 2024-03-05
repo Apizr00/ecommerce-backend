@@ -3,7 +3,7 @@ package com.baluchi.ecommerce.ecommerce.entity;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import com.baluchi.ecommerce.ecommerce.dto.CartItemsDto;
+import com.baluchi.ecommerce.ecommerce.dto.WishlistDto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,20 +12,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import lombok.Data;
 
-@Entity
 @Data
-public class CartItems {
-
+@Entity
+public class Wishlist {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private Long price;
-
-    private Long quantity;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "product_id", nullable = false)
@@ -37,20 +32,17 @@ public class CartItems {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    private Order order;
+    public WishlistDto getWishlistDto() {
+        WishlistDto wishlistDto = new WishlistDto();
 
-    public CartItemsDto getCartDto() {
-        CartItemsDto cartItemsDto = new CartItemsDto();
-        cartItemsDto.setId(id);
-        cartItemsDto.setPrice(price);
-        cartItemsDto.setProductId(product.getId());
-        cartItemsDto.setQuantity(quantity);
-        cartItemsDto.setUserId(user.getId());
-        cartItemsDto.setProductName(product.getName());
-        cartItemsDto.setReturnedImg(product.getImg());
+        wishlistDto.setId(id);
+        wishlistDto.setProductId(product.getId());
+        wishlistDto.setReturnedImg(product.getImg());
+        wishlistDto.setProductName(product.getName());
+        wishlistDto.setProductDescription(product.getDescription());
+        wishlistDto.setPrice(product.getPrice());
+        wishlistDto.setUserId(user.getId());
 
-        return cartItemsDto;
+        return wishlistDto;
     }
 }

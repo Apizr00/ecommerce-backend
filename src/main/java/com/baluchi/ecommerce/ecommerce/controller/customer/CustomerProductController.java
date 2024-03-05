@@ -2,6 +2,7 @@ package com.baluchi.ecommerce.ecommerce.controller.customer;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baluchi.ecommerce.ecommerce.dto.ProductDetailDto;
 import com.baluchi.ecommerce.ecommerce.dto.ProductDto;
 import com.baluchi.ecommerce.ecommerce.services.customer.CustomerProductService;
 
@@ -31,5 +32,12 @@ public class CustomerProductController {
     public ResponseEntity<List<ProductDto>> getAllProductByTitle(@PathVariable String name) {
         List<ProductDto> productDtos = customerProductService.searchProductByTitle(name);
         return ResponseEntity.ok(productDtos);
+    }
+
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<ProductDetailDto> getProductDetailById(@PathVariable Long productId) {
+        ProductDetailDto productDetailDto = customerProductService.getProductDetailById(productId);
+        if (productDetailDto == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(productDetailDto);
     }
 }
